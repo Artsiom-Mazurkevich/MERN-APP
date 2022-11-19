@@ -52,6 +52,9 @@ class authController_ {
     async getUsers(req: Request, res: Response) {
         try {
             res.json({message: 'ALL WORK'})
+            console.log('trtrt')
+            console.log('trtrt')
+            console.log('trtrt')
         }
         catch (e) {
 
