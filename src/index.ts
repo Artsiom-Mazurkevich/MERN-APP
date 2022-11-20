@@ -1,11 +1,12 @@
-import express from "express";
+// import * as express from "express";
+const express = require('express')
 import mongoose, {ConnectOptions} from "mongoose";
-import cors from "cors"
+import cors = require("cors");
 import {authRouter} from "./routes/authRouter";
-import dotenv from 'dotenv';
+import {config} from 'dotenv';
 
-const app = express();
-dotenv.config()
+const app = express()
+config()
 app.use(express.json());
 app.use(cors())
 app.use(express.urlencoded({extended: true}));

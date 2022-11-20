@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import {User} from '../models/User';
-import bcrypt from 'bcrypt';
-import jwt, {Secret} from 'jsonwebtoken';
+import {hashSync, compareSync} from 'bcrypt';
+import {Secret, sign} from 'jsonwebtoken';
 import {validationResult} from 'express-validator';
 
 
@@ -17,7 +17,7 @@ class authController_ {
             if (candidate) {
                 return res.status(400).json({message: "User with this email already exists"})
             }
-            const hashPassword = bcrypt.hashSync(password, 8)
+            const hashPassword = hashSync(password, 8)
             const user = new User({email, password: hashPassword})
             await user.save()
             return res.json({message: 'User inserted successfully'})
@@ -34,10 +34,10 @@ class authController_ {
             const user = await User.findOne({ email });
             if (user) {
                 //check if password matches
-                const result = bcrypt.compareSync(password, user.password);
+                const result = compareSync(password, user.password);
                 if (result) {
                     // sign token and send it in response
-                    const token = jwt.sign({ email }, process.env.JWTSECRET as Secret, {expiresIn: '1h'});
+                    const token = sign({ email }, process.env.JWTSECRET as Secret, {expiresIn: '1h'});
                     res.json({ token });
                 } else {
                     res.status(400).json({ error: "password doesn't match" });
@@ -52,9 +52,6 @@ class authController_ {
     async getUsers(req: Request, res: Response) {
         try {
             res.json({message: 'ALL WORK'})
-            console.log('trtrt')
-            console.log('trtrt')
-            console.log('trtrt')
         }
         catch (e) {
 
