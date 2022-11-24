@@ -5,10 +5,11 @@ import {Request, Response} from "express";
 
 
 class PostController_ {
-    async createPost (req:Request<{}, {}, IPost>, res: Response) {
+    async createPost (req: Request<{}, {}, IPost>, res: Response) {
         try {
-            const {title, text, tags, viewsCount, imageURL, author} = req.body
-            const post = new Post({title, text, tags, viewsCount, imageURL, author})
+            const {title, text, tags, imageURL} = req.body
+            // @ts-ignore
+            const post = new Post({title, text, tags, imageURL, author: req.user.id})
             await post.save()
             res.json({message: 'success'})
         }

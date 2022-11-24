@@ -1,4 +1,4 @@
-import * as express from "express"
+import * as express from "express";
 import {authController} from "../controllers/authController";
 import {check} from 'express-validator';
 import {authMiddleware} from "../middleware/authMiddleware";

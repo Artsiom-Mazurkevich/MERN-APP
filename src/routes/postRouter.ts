@@ -5,7 +5,7 @@ import {postController} from "../controllers/postController";
 
 const router = express.Router()
 
-router.post('/post', postController.createPost)
+router.post('/post', authMiddleware, postController.createPost)
 
 
 

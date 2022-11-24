@@ -5,14 +5,14 @@ export interface IPost {
     _id?: mongoose.Types.ObjectId;
     title: string;
     text: string;
-    tags: Types.Array<any>;
+    tags: Schema.Types.Array;
     viewsCount: number;
     imageURL?: string;
-    author: Types.ObjectId;
+    author: Schema.Types.ObjectId;
 }
 
 
-const IPostSchema = new Schema<IPost> (
+const PostSchema = new Schema<IPost> (
     {
         title: {
             type: String,
@@ -24,16 +24,23 @@ const IPostSchema = new Schema<IPost> (
             type: String,
             required: true,
         },
-        tags: {default: []},
+        tags: {
+            type: Schema.Types.Array,
+            default: [],
+            required: true
+        },
         viewsCount: {
             type: Number,
             default: 0
         },
-        author: String,
+        author: {
+            type: Types.ObjectId,
+            required: true
+        },
         imageURL: String
 
     },
     {collection: "posts", timestamps: true}
 );
 
-export const Post: Model<IPost> = model("Post", IPostSchema);
+export const Post: Model<IPost> = model("Post", PostSchema);

@@ -37,7 +37,7 @@ class authController_ {
                 const result = compareSync(password, user.password);
                 if (result) {
                     // sign token and send it in response
-                    const token = sign({ email }, process.env.JWTSECRET as Secret, {expiresIn: '1h'});
+                    const token = sign({ email, id: user._id }, process.env.JWTSECRET as Secret, {expiresIn: '1h'});
                     res.json({ token });
                 } else {
                     res.status(400).json({ error: "password doesn't match" });
