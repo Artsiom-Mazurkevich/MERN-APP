@@ -16,7 +16,7 @@ app.use('/auth', authRouter)
 app.use('/', postRouter)
 
 const DBURI = process.env.DBURI || '';
-const PORT  = process.env.PORT
+const PORT  = process.env.PORT || 5000;
 
 const start = async () => {
     try {
