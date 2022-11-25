@@ -27,10 +27,20 @@ class PostController_ {
     }
     async deletePost (req:Request, res: Response) {
         try {
-
+            const postId = req.params.id;
+            Post.findOneAndDelete({_id: postId}, {}, (err, doc) => {
+                if (err) {
+                    console.log(err)
+                    return res.status(500).json({message: "Failed to delete article"})
+                }
+                if (!doc) {
+                    return res.status(404).json({message: "Article not found"})
+                }
+                return res.json({message: "Article deleted successfully"})
+            })
         }
         catch (e) {
-
+            console.log(e)
         }
     }
 }
