@@ -37,7 +37,10 @@ const PostSchema = new Schema<IPost> (
             type: Types.ObjectId,
             required: true
         },
-        imageURL: String
+        imageURL: {
+            type: String,
+            required: false
+        }
 
     },
     {collection: "posts", timestamps: true}
