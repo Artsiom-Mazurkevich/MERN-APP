@@ -1,33 +1,55 @@
 import {Request, Response} from 'express';
 import {uploadFilesMiddleware} from '../middleware/upload';
 import mongoose from 'mongoose';
-
+import {User} from "../models/User";
+import {log} from "util";
+import {Post} from "../models/PostSchema";
 
 
 class UploadController_ {
-    async uploadFiles (req: Request, res: Response) {
+    async uploadFiles(req: Request, res: Response) {
         try {
-            await uploadFilesMiddleware(req, res);
-            console.log(req.file);
-
-            if (req.file == undefined) {
+            if (req.file === undefined) {
                 return res.send({
                     message: "You must select a file.",
                 });
             }
-
-            return res.send({
-                message: "File has been uploaded.",
-            });
-        } catch (error) {
-            console.log(error);
-
-            return res.send({
-                message: "Error when trying upload image: ${error}",
-            });
+            // @ts-ignore
+            const id = req.file.id
+            if (id) {
+                // @ts-ignore
+                await Post.findOneAndUpdate({author: req.user.id}, {imageURL: id}, {}, (err, doc) => {
+                    if (err) console.log(err)
+                    else res.json({message: 'Image upload success', updatedUser: doc})
+                })
+            }
+        } catch (e) {
+            console.log(e)
         }
+        // try {
+        //     const fileInfo = await uploadFilesMiddleware(req, res).then((res: any) => console.log(res))
+        //
+        //
+        //
+        //     if (req.file === undefined) {
+        //         return res.send({
+        //             message: "You must select a file.",
+        //         });
+        //     }
+        //
+        //     return res.send({
+        //         message: "File has been uploaded.",
+        //     });
+        // } catch (error) {
+        //     console.log(error);
+        //
+        //     return res.send({
+        //         message: `Error when trying upload image: ${error}`,
+        //     });
+        // }
     }
-    async getListFiles (req: Request, res: Response) {
+
+    async getListFiles(req: Request, res: Response) {
         try {
             const {db} = mongoose.connection
             const images = db.collection("images" + ".files");
@@ -55,7 +77,8 @@ class UploadController_ {
             });
         }
     }
-    async download (req: Request, res: Response) {
+
+    async download(req: Request, res: Response) {
         try {
             const {db} = mongoose.connection
             const bucket = new mongoose.mongo.GridFSBucket(db, {
@@ -69,7 +92,7 @@ class UploadController_ {
             });
 
             downloadStream.on("error", function (err) {
-                return res.status(404).send({ message: "Cannot download the Image!" });
+                return res.status(404).send({message: "Cannot download the Image!"});
             });
 
             downloadStream.on("end", () => {

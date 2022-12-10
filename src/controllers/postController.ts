@@ -1,13 +1,15 @@
 import {Post, IPost} from '../models/PostSchema';
 import {Request, Response} from "express";
+import {uploadController} from "./uploadController";
+import {log} from "util";
 
 
 class PostController_ {
     async createPost(req: Request<{}, {}, IPost>, res: Response) {
         try {
-            const {title, text, tags, imageURL} = req.body
+            const {title, text, tags} = req.body
             // @ts-ignore
-            const post = new Post({title, text, tags, imageURL, author: req.user.id})
+            const post = new Post({title, text, tags, author: req.user.id})
             await post.save()
             res.json({message: 'success'})
         } catch (e) {

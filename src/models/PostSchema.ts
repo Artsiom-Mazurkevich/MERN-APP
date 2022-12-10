@@ -38,8 +38,9 @@ const PostSchema = new Schema<IPost> (
             required: true
         },
         imageURL: {
-            type: String,
-            required: false
+            type: Schema.Types.ObjectId,
+            required: false,
+            default: null
         }
 
     },
